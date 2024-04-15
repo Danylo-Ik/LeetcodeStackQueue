@@ -1,32 +1,29 @@
-class Node:
-    def __init__(self, value, next=None):
-        self.value = value
-        self.next = next
+from collections import deque
 
 class MyQueue:
     def __init__(self):
-        self.head = None
-        self.tail = None
+        self.stack = deque()
+        self.temp = deque()
 
     def push(self, x: int) -> None:
-        if not self.head:
-            self.head = Node(x)
-            self.tail = self.head
-        else:
-            self.tail.next = Node(x)
-            self.tail = self.tail.next
+        self.stack.append(x)
 
     def pop(self) -> int:
-        if self.head:
-            value = self.head.value
-            self.head = self.head.next
-            return value
-        return None
+        while len(self.stack) > 1:
+            self.temp.append(self.stack.pop())
+        result = self.stack.pop()
+        while self.temp:
+            self.stack.append(self.temp.pop())
+        return result
 
     def peek(self) -> int:
-        if self.head:
-            return self.head.value
-        return None
+        while self.stack:
+            self.temp.append(self.stack.pop())
+        result = self.temp[-1]
+        while self.temp:
+            self.stack.append(self.temp.pop())
+        return result
+        
 
     def empty(self) -> bool:
-        return not self.head
+        return not self.stack
